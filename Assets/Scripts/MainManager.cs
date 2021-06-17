@@ -92,6 +92,7 @@ public class MainManager : MonoBehaviour
         {
             GameManager.Instance.highscore = m_Points;
             GameManager.Instance.topPlayerName = playerName;
+            GameManager.Instance.SavePlayerData();
         }
     }
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 public class GameManager : MonoBehaviour
 {
@@ -20,5 +21,38 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        LoadPlayerData();
+    }
+
+    [System.Serializable]
+    class SaveData
+    {
+        public string PlayerName;
+        public int HighScore;
+    }
+
+    public void SavePlayerData()
+    {
+        SaveData data = new SaveData();
+        data.PlayerName = topPlayerName;
+        data.HighScore = highscore;
+
+        string json = JsonUtility.ToJson(data);
+
+        File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
+    }
+
+    public void LoadPlayerData()
+    {
+        string path = Application.persistentDataPath + "/savefile.json";
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            SaveData data = JsonUtility.FromJson<SaveData>(json);
+
+            topPlayerName = data.PlayerName;
+            highscore = data.HighScore;
+        }
     }
 }
